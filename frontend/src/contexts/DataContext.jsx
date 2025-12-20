@@ -38,7 +38,8 @@ const EXPENSE_CATEGORIES = [
 ];
 
 // 🔹 Backend API
-const API_URL = "http://localhost:5000/api";
+//const API_URL = "http://localhost:5000/api";
+const API_URL = "https://expense-tracker-xzkx.onrender.com/api";
 
 export const DataProvider = ({ children }) => {
   const { user } = useAuth();
