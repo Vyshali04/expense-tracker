@@ -4,7 +4,7 @@ const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
 //const API_URL = "http://localhost:5000/api/auth";
-const API_URL = "https://expense-tracker-xzkx.onrender.com/api/auth";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
