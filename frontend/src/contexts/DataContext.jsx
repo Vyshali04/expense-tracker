@@ -65,7 +65,7 @@ export const DataProvider = ({ children }) => {
     try {
       const res = await axios.get(`${API_URL}/transactions`);
       const userTransactions = res.data.filter(
-        (t) => t.userId === user.id
+        (t) => t.userId === user._id
       );
       setTransactions(userTransactions);
     } catch (error) {
@@ -79,7 +79,7 @@ export const DataProvider = ({ children }) => {
     setLoading(true);
     try {
       const res = await axios.post(`${API_URL}/transactions`, {
-        userId: user.id,
+        userId: user._id,
         ...transactionData,
       });
 
@@ -99,7 +99,7 @@ export const DataProvider = ({ children }) => {
     try {
       await axios.put(`${API_URL}/transactions/${id}`, updates);
       setTransactions((prev) =>
-        prev.map((t) => (t.id === id ? { ...t, ...updates } : t))
+        prev.map((t) => (t._id === id ? { ...t, ...updates } : t))
       );
       setLoading(false);
       return { success: true };
