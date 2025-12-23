@@ -70,10 +70,12 @@ export const AuthProvider = ({ children }) => {
   };
 
   // LOGOUT
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("expense_tracker_user");
-  };
+ const logout = () => {
+  setUser(null);
+  localStorage.removeItem("expense_tracker_user");
+  window.location.reload(); // 🔥 FORCE RESET
+};
+
 
   return (
     <AuthContext.Provider value={{ user, register, login, logout, loading }}>

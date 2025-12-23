@@ -18,17 +18,12 @@ router.post("/register", async (req, res) => {
 
     const hashed = await bcrypt.hash(password, 10);
 
-    const user = new User({
-      name,
-      email,
-      password: hashed
-    });
-
+    const user = new User({ name, email, password: hashed });
     await user.save();
 
-    console.log("User saved to MongoDB:", user);
-
-    res.status(201).json({ message: "Registered successfully" });
+    res.status(201).json({
+      user: { id: user._id, name: user.name, email: user.email }
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

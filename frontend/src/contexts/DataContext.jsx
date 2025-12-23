@@ -48,30 +48,31 @@ export const DataProvider = ({ children }) => {
 
   // 🔹 Load transactions when user logs in
   useEffect(() => {
-    if (user) {
-      loadTransactions();
-    } else {
-      setTransactions([]);
-    }
-  }, [user]);
+  setTransactions([]); // 👈 CLEAR OLD USER DATA
+
+  if (user) {
+    loadTransactions();
+  }
+}, [user]);
 
   // ========================
   // API FUNCTIONS
   // ========================
 
   const loadTransactions = async () => {
-    if (!user) return;
+  if (!user) return;
 
-    try {
-      const res = await axios.get(`${API_URL}/transactions`);
-      const userTransactions = res.data.filter(
-        (t) => t.userId === user._id
-      );
-      setTransactions(userTransactions);
-    } catch (error) {
-      console.error("Error loading transactions:", error);
-    }
-  };
+  try {
+    const res = await axios.get(
+      `${API_URL}/transactions?userId=${user.id}`
+    );
+
+    // ❌ NO FRONTEND FILTERING
+    setTransactions(res.data);
+  } catch (error) {
+    console.error("Error loading transactions:", error);
+  }
+};
 
   const addTransaction = async (transactionData) => {
     if (!user) return { success: false, error: "User not authenticated" };
@@ -79,7 +80,7 @@ export const DataProvider = ({ children }) => {
     setLoading(true);
     try {
       const res = await axios.post(`${API_URL}/transactions`, {
-        userId: user._id,
+        userId: user.id,
         ...transactionData,
       });
 

@@ -6,9 +6,32 @@ const router = express.Router();
 /**
  * GET all transactions
  */
+// router.get("/", async (req, res) => {
+//   try {
+//     const { userId } = req.query;
+
+//     if (!userId) {
+//       return res.status(400).json({ message: "User ID required" });
+//     } 
+
+//     const transactions = await Transaction.find({ userId });
+//     res.json(transactions);
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
 router.get("/", async (req, res) => {
   try {
-    const transactions = await Transaction.find();
+    const userId = req.query.userId?.toString();
+
+    if (!userId) {
+      return res.status(400).json({ message: "User ID required" });
+    }
+
+    const transactions = await Transaction.find({
+      userId: userId
+    });
+
     res.json(transactions);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -18,18 +41,42 @@ router.get("/", async (req, res) => {
 /**
  * POST – Save transaction to MongoDB
  */
+// router.post("/", async (req, res) => {
+//   try {
+//     if (!req.body.userId) {
+//       return res.status(400).json({ message: "User ID required" });
+//     }
+
+//     const transaction = new Transaction(req.body);
+//     const savedTransaction = await transaction.save();
+
+//     res.status(201).json(savedTransaction);
+//   } catch (err) {
+//     res.status(400).json({ error: err.message });
+//   }
+// });
 router.post("/", async (req, res) => {
   try {
-    console.log("Saving to MongoDB:", req.body);
+    const { userId } = req.body;
 
-    const transaction = new Transaction(req.body);
-    const savedTransaction = await transaction.save();
+    if (!userId) {
+      return res.status(400).json({ message: "User ID required" });
+    }
 
-    res.status(201).json(savedTransaction);
+    const transaction = new Transaction({
+      ...req.body,
+      userId: userId.toString()
+    });
+    // console.log("Transaction userId:", req.body.userId);
+
+
+    const saved = await transaction.save();
+    res.status(201).json(saved);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
+
 
 /**
  * DELETE transaction
