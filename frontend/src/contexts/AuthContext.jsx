@@ -73,7 +73,7 @@ export const AuthProvider = ({ children }) => {
  const logout = () => {
   setUser(null);
   localStorage.removeItem("expense_tracker_user");
-  window.location.reload(); // 🔥 FORCE RESET
+ 
 };
 
 
